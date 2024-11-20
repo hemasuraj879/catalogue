@@ -9,6 +9,12 @@ pipeline {
         }
     }
 
+    stages{
+        stage('Test Purpose'){
+            echo " testing will be done here"
+        }
+    }
+
     post {
         success {
             echo 'Pipeline is successful!'
