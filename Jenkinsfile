@@ -10,7 +10,7 @@ pipeline {
     }
 
     stages{
-        stage('Test Purpose'){
+        stage('Test Purpose') {
             echo " testing will be done here"
         }
     }
