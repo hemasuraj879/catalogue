@@ -14,6 +14,14 @@ pipeline {
             """
         }
     }
+
+    stage('DOCKER IMAGE PUSH'){
+        steps{
+            sh  """
+                docker push surajk879/catalogue:1.11
+            """
+        }
+    }
   }
 
   post {
