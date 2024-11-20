@@ -22,6 +22,16 @@ pipeline {
             """
         }
     }
+
+    stage('EKS DEPLOY'){
+
+        steps{
+
+            sh """
+                kubectl apply -f manifest.yaml
+            """
+        }
+    }
   }
 
   post {
