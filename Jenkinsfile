@@ -1,30 +1,26 @@
 pipeline {
-    agent { label 'agent' }
+  agent { label 'agent' }
 
-    stages {
-        stage('Git Checkout') {
-            steps {
-                git 'https://github.com/hemasuraj879/catalogue.git'
-            }
-        }
+  stages {
+    stage('Git Checkout') {
+      steps {
+        git 'https://github.com/hemasuraj879/catalogue.git'
+      }
+    }
+    stage('Test Purpose') {
+      steps {
+        echo 'testing will be done here'
+      }
+    }
+  }
+
+  post {
+    success {
+      echo 'Pipeline is successful!'
     }
 
-    stages{
-        stage('Test Purpose') {
-            steps {
-                echo 'testing will be done here'
-            }
-            
-        }
+    failure {
+      echo 'Pipeline failed!'
     }
-
-    post {
-        success {
-            echo 'Pipeline is successful!'
-        }
-
-        failure {
-            echo 'Pipeline failed!'
-        }
-    }
+  }
 }
