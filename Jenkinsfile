@@ -7,10 +7,12 @@ pipeline {
         git 'https://github.com/hemasuraj879/catalogue.git'
       }
     }
-    stage('Test Purpose') {
-      steps {
-        echo 'testing will be done here'
-      }
+    stage('DOCKER IMAGE BUILD'){
+        steps{
+            sh """
+                docker build -t surajk879/catalogue:1.11 .
+            """
+        }
     }
   }
 
