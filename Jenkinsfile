@@ -1,46 +1,37 @@
 pipeline {
-  agent { label 'agent' }
 
-  stages {
-    stage('Git Checkout') {
-      steps {
+  agent ( label 'sonarqube')
+
+  stages{
+
+    stage('GIT CHECKOUT'){
+
+      steps{
+
         git 'https://github.com/hemasuraj879/catalogue.git'
       }
-    }
-    stage('DOCKER IMAGE BUILD'){
-        steps{
-            sh """
-                docker build -t surajk879/catalogue:1.11 .
-            """
-        }
+
     }
 
-    stage('DOCKER IMAGE PUSH'){
-        steps{
-            sh  """
-                docker push surajk879/catalogue:1.11
-            """
-        }
+    stage('INSTALL DEPENDENCIES'){  
+
+      steps{
+
+        sh 'npm install'
+      }
+
+
     }
 
-    stage('EKS DEPLOY'){
+    steps('SONAR-SCAN'){
 
-        steps{
+      steps{
 
-            sh """
-                kubectl apply -f manifest.yaml
-            """
-        }
+        sh 'sonar-scanner'
+      }
     }
+
   }
 
-  post {
-    success {
-      echo 'Pipeline is successful!'
-    }
 
-    failure {
-      echo 'Pipeline failed!'
-    }
-  }
 }
