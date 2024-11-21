@@ -1,6 +1,6 @@
 pipeline {
 
-  agent ( label 'sonarqube')
+  agent { label 'sonarqube' }
 
   stages{
 
