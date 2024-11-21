@@ -2,36 +2,25 @@ pipeline {
 
   agent { label 'sonarqube' }
 
-  stages{
+  stages {
 
     stage('GIT CHECKOUT'){
-
       steps{
-
         git 'https://github.com/hemasuraj879/catalogue.git'
       }
-
     }
 
-    stage('INSTALL DEPENDENCIES'){  
-
+    stage('INSTALL DEPENDENCIES'){
       steps{
-
         sh 'npm install'
       }
-
-
     }
 
-    steps('SONAR-SCAN'){
-
+    // Move "SONAR-SCAN" steps inside a stage definition
+    stage('SONAR SCAN'){
       steps{
-
         sh 'sonar-scanner'
       }
     }
-
   }
-
-
 }
