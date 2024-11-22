@@ -1,26 +1,26 @@
 pipeline {
+    agent { label 'agent' }
 
-  agent { label 'sonarqube' }
-
-  stages {
-
-    stage('GIT CHECKOUT'){
-      steps{
-        git 'https://github.com/hemasuraj879/catalogue.git'
-      }
+    stages {
+        stage('DOCKER LOGIN CHECK') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'docker-auth', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        echo "Username is: $USERNAME"
+                        sh """
+                            docker login -u $USERNAME -p $PASSWORD
+                        """
+                    }
+                }
+            }
+        }
+        
+        stage('DOCKER IMAGE BUILD'){
+          steps {
+            sh """
+              docker $USERNAME/$JOB_NAME:$JOB_ID .
+            """
+          }
+        }
     }
-
-    stage('INSTALL DEPENDENCIES'){
-      steps{
-        sh 'npm install'
-      }
-    }
-
-    // Move "SONAR-SCAN" steps inside a stage definition
-    stage('SONAR SCAN'){
-      steps{
-        sh 'sonar-scanner'
-      }
-    }
-  }
 }
