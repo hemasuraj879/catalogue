@@ -25,7 +25,7 @@ pipeline {
 
         stage('DEPLOY TO EKS CLUSTER'){
             steps{
-                sh """"
+                sh """
                   kubectl apply -f manifest.yaml
                 """
             }
