@@ -26,7 +26,9 @@ pipeline {
         stage('DEPLOY TO EKS CLUSTER'){
             steps{
                 sh """
+                  sed -i 's/surajk879\/catalogue:1.9/surajk879\/$JOB_NAME:$BUILD_NUMBER/g' manifest.yaml
                   kubectl apply -f manifest.yaml
+                  
                 """
             }
         }
