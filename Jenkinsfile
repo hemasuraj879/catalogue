@@ -19,7 +19,7 @@ pipeline {
         stage('DOCKER IMAGE BUILD') {
             steps {
                 sh """
-                    docker build -t $USER_NAME/$JOB_NAME:$BUILD_ID .
+                    docker build -t $username/$JOB_NAME:$BUILD_ID .
                 """
             }
         }
