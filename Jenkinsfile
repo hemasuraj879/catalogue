@@ -23,5 +23,12 @@ pipeline {
                 """
             }
         }
+        stage('DOCKER IMAGE PUSH') {
+            steps {
+                sh """
+                    docker push surajk879/$JOB_NAME:$BUILD_ID
+                """
+            }
+        }
     }
 }
