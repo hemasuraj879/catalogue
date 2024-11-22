@@ -1,3 +1,5 @@
+
+
 pipeline {
     agent { label 'agent' }
 
@@ -5,22 +7,21 @@ pipeline {
         stage('DOCKER LOGIN CHECK') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        echo "Username is: $USERNAME"
+                    withCredentials([usernamePassword(credentialsId: 'docker-auth', usernameVariable: 'username', passwordVariable: 'password')]) {
                         sh """
-                            docker login -u $USERNAME -p $PASSWORD
+                            docker login -u $username -p $password
                         """
                     }
                 }
             }
         }
-        
-        stage('DOCKER IMAGE BUILD'){
-          steps {
-            sh """
-              docker $USERNAME/$JOB_NAME:$JOB_ID .
-            """
-          }
+
+        stage('DOCKER IMAGE BUILD') {
+            steps {
+                sh """
+                    docker build -t $USER_NAME/$JOB_NAME:$BUILD_ID .
+                """
+            }
         }
     }
 }
