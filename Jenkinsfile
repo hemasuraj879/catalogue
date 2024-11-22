@@ -2,11 +2,11 @@ pipeline {
 
   agent { label 'agent'}
 
-  stages{
-    stage('DOCKER LOGIN CHECK'){
-      steps{
-        script{
-          withCredentials([usernamePassword(credentialsId: 'docker-auth', usernameVariable: 'username', passwordVariable: 'password')]){
+  stages {
+    stage('DOCKER LOGIN CHECK') {
+      steps {
+        script {
+          withCredentials([usernamePassword(credentialsId: 'docker-auth', usernameVariable: 'username', passwordVariable: 'password')]) {
             sh """
               docker login -u $username -p $password
             """
@@ -14,8 +14,8 @@ pipeline {
         }
       }
     }
-    stage('DOCKER IMAGE BUILD AND PUSH'){
-      steps{
+    stage('DOCKER IMAGE BUILD AND PUSH') {
+      steps {
         sh """
           docker build -t surajk879/$JOB_NAME:$BUILD_NUMBER .
           docker push surajk879/$JOB_NAME:$BUILD_NUMBER
@@ -23,28 +23,27 @@ pipeline {
       }
     }
 
-    stage('DEPLOY TO EKS CLUSTER'){
-        steps{
-            script{
-                sh """
-                    sed -i 's/surajk879\/catalogue:1.9/surajk879\/\$JOB_NAME:\$BUILD_NUMBER/g' manifest.yaml
-                    kubectl apply -f manifest.yaml
-
-                """
-            }
+    stage('DEPLOY TO EKS CLUSTER') {
+      steps {
+        script {
+          sh '''
+            sed -i 's/surajk879\\/catalogue:1.9/surajk879\\/$JOB_NAME:$BUILD_NUMBER/g' manifest.yaml
+            kubectl apply -f manifest.yaml
+          '''
         }
+      }
     }
   }
 
-  post{
-    always{
-      //cleaning up workdir
+  post {
+    always {
+      // cleaning up workdir
       deleteDir()
     }
-    success{
+    success {
       echo "$JOB_NAME IS SUCCESS"
     }
-    failure{
+    failure {
       echo "$JOB_NAME IS FAILURE"
     }
   }
